@@ -1,0 +1,303 @@
+/* 
+References:
+Titles: Place Search Box
+URL: https://developers.google.com/maps/documentation/javascript/examples/places-searchbox#maps_places_searchbox-css 
+and https://developers.google.com/maps/documentation/javascript/examples/places-searchbox#maps_places_searchbox-css  
+License: Apache 2.0 License
+
+Title: Place Autocomplete
+URL: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete#maps_places_autocomplete-css 
+and https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete#maps_places_autocomplete-css 
+License: Apache 2.0 License
+
+Title: Customizing a Google Map: Custom Legends
+URL: https://developers.google.com/maps/documentation/javascript/adding-a-legend#maps_legend-css
+*/
+li a {
+    color: #232D4B;
+}
+
+body {
+    font-family: 'Franklin Gothic', sans-serif;
+    color: white;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: 'Bodoni', serif;
+    font-weight: bold;
+    color: white
+}
+
+#claimItemModal .modal-body {
+  color: black;
+  font-family: 'Franklin Gothic', sans-serif;
+}
+
+.buttons-container {
+  text-align: center; 
+  margin-top: 20px; 
+  margin-bottom: 100px; 
+  position: static; 
+  clear: both;
+}
+
+.bottom-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #FFFFFF; 
+    padding: 30px 0; 
+    box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1); 
+    display: flex;
+    justify-content: space-evenly; 
+    align-items: center;
+    z-index: 100; 
+    height: auto;
+  }
+
+  .custom-close-btn {
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  .close-container {
+    position: absolute;
+    top: 15;
+    right: 15;
+    z-index: 10;
+}
+  
+  .banner-item {
+    text-align: center;  
+  }
+  
+  .button-icon {
+    display: block; 
+    margin: 0 auto 10px; 
+    width: 50px; 
+    height: auto;
+  }
+  
+  .button-title {
+    margin-bottom: 5px; 
+    font-size: 14px; 
+    color: #000; 
+  }
+  
+  .banner-button1 {
+    background-color: #232D4B; 
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px; 
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .banner-button2 {
+    background-color: #F84C1E; 
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px; 
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .upload-button {
+    background-color: #F84C1E; 
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px; 
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .upload-button:hover {
+    background-color: #ffae98;
+  }
+
+  .banner-button1:hover {
+    background-color: #F84C1E;
+  }
+
+  .banner-button2:hover {
+    background-color: #232D4B;
+  }
+
+.mapholder{
+    height: 1300px;
+    width: 100%;
+    position: relative;
+    padding-bottom: 200px;
+}
+
+#map{
+    height: 100%;
+    width: 100%
+}
+
+.custom-nav-link {
+    color:  #232D4B; 
+    position: relative;
+}
+
+.custom-nav-link:hover,
+.custom-nav-link:focus {
+    color: #F84C1E; 
+}
+
+.nav-link.active.custom-nav-link::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: #F84C1E; /* underline! */
+    position: absolute;
+    bottom: -8px; 
+    left: 0;
+}
+.pac-card {
+    background-color: #fff;
+    border: 0;
+    border-radius: 2px;
+    box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
+    margin: 1px;
+    padding: 0 0.5em;
+    font: 400 18px Roboto, Arial, sans-serif;
+    overflow: hidden;
+    font-family: Roboto;
+    padding: 0;
+}
+
+#pac-container {
+    padding-bottom: 12px;
+    margin-right: 12px;
+}
+
+.pac-controls {
+    display: inline-block;
+    padding: 5px 11px;
+}
+
+.pac-controls label {
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: 300;
+}
+
+#pac-input {
+    background-color: #fff;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: 300;
+    margin-left: 12px;
+    padding: 0 11px 0 13px;
+    text-overflow: ellipsis;
+    width: 400px;
+}
+
+#title {
+    color: #fff;
+    background-color: #0b147f;
+    font-size: 25px;
+    font-weight: 500;
+    padding: 6px 12px;
+}
+
+#target {
+    width: 345px;
+}
+
+.list-group-container {
+    padding-left: 15%;
+    padding-right: 15%;
+    padding-top: 60px;
+}
+
+  .table-container {
+    padding-left: 8%;
+    padding-right: 8%;
+    padding-top: 45px;
+}
+
+
+.img-center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+.img-resize {
+    width: 200px;  
+    height: auto;  
+}
+
+.background-box {
+  background-color: white;
+  padding: 8px;
+  margin: 30px auto; 
+  width: 40%; 
+  border-radius: 10px; 
+}
+
+.instruction {
+  color: #232D4B;
+  font-size: 1.2rem; 
+  line-height: 1.5; 
+  margin: 0; 
+  word-wrap: break-word; 
+}
+
+/* This is directly from Google Maps API Website: https://developers.google.com/maps/documentation/javascript/adding-a-legend#maps_legend-css */
+#legend {
+  font-family: 'Franklin Gothic', sans-serif;
+  font-weight: bold;
+  background: #fff;
+  color: #232D4B;
+  padding: 15px;
+  margin: 15px;
+  border: 3px solid #232D4B;
+  font-size: 14px;
+}
+
+#legend h3 {
+  color: #232D4B;
+  margin-top: 0;
+}
+
+#legend img {
+  vertical-align: middle;
+}
+
+.custom-popover {
+  --bs-popover-max-width: 200px;
+  --bs-popover-border-color: #F84C1E;
+  --bs-popover-header-bg: #F84C1E;
+  --bs-popover-header-color: white;
+  --bs-popover-body-padding-x: 1rem;
+  --bs-popover-body-padding-y: .5rem;
+}
+
+.form-label .icon-link {
+  color: #ffffff; 
+  text-decoration: none;
+}
+
+.form-label .icon-link:hover,
+.form-label .icon-link:focus {
+  color: #F84C1E; 
+  text-decoration: none; 
+}

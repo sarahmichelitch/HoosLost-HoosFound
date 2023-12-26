@@ -1,0 +1,435 @@
+<!-- REFERENCES:
+
+Titles: Place Search Box
+URL: https://developers.google.com/maps/documentation/javascript/examples/places-searchbox#maps_places_searchbox-css 
+and https://developers.google.com/maps/documentation/javascript/examples/places-searchbox#maps_places_searchbox-html 
+License: Apache 2.0 License
+
+Title: Place Autocomplete
+URL: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete#maps_places_autocomplete-javascript
+and https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete#maps_places_autocomplete-html 
+License: Apache 2.0 License
+
+Title: Markers (Maps JavaScript API)
+URL: https://developers.google.com/maps/documentation/javascript/markers
+License: Apache 2.0 License
+
+Title: Overlapping Marker Spiderfier for Google Maps API v3
+URL: https://github.com/jawj/OverlappingMarkerSpiderfier
+License: MIT License
+
+URL: https://chat.openai.com/
+Usage: Debugging ClaimItem function to work with CreateMarker
+
+URL: https://www.bing.com/
+Usage: Understanding what errors could cause all map markers to disappear after iterating through them with the CreateMarker function
+
+Title: How to put a link on a button with bootstrap?
+URL: https://stackoverflow.com/questions/36003670/how-to-put-a-link-on-a-button-with-bootstrap
+
+Title: how to pass csrf_token to javascript file in django?
+URL: https://stackoverflow.com/questions/23349883/how-to-pass-csrf-token-to-javascript-file-in-django
+
+Title: Customizing a Google Map: Custom Legends
+URL: https://developers.google.com/maps/documentation/javascript/adding-a-legend
+
+Title: Info Windows (Maps JavaScript API)
+URL: https://developers.google.com/maps/documentation/javascript/infowindows
+License: Apache 2.0 License
+
+Title: Bootstrap Navbar
+URL: https://getbootstrap.com/docs/5.3/components/navbar/
+
+Title: Bootstrap Collapse
+URL: https://getbootstrap.com/docs/5.3/components/collapse/
+Usage: Used to collapse the bottom banner
+
+Title: Bootstrap Modal
+URL: https://getbootstrap.com/docs/5.3/components/modal/
+
+Title: Bootstrap Arrow Bar Down Icon
+URL: https://icons.getbootstrap.com/icons/arrow-bar-down/
+Usage: Used on the bottom banner to collapse
+
+Title: Bootstrap Buttons
+URL: https://getbootstrap.com/docs/5.3/components/buttons/
+
+-->
+
+
+{% load static %}
+
+<!--CDNs for Bootstrap-->
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+  crossorigin="anonymous"
+/>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+  crossorigin="anonymous"
+></script>
+
+<!DOCTYPE html>
+
+<!-- Navbar -->
+<nav
+  class="navbar navbar-expand-lg bg-body-tertiary"
+  style="background-color: #c9deed"
+>
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img
+        src="{% static 'login/images/New L&F Symbol.png' %}"
+        alt="HoosLost&HoosFound Logo"
+        width="80"
+        height="80"
+        class="d-inline-block align-text-top"
+    /></a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active custom-nav-link" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link custom-nav-link" href="{% url 'upload_item' %}">Upload an Item</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link custom-nav-link" href="{% url 'my_uploads' %}">My Uploads</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link custom-nav-link" href="{% url 'user_notifications' %}">Notifications</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link custom-nav-link" href="{% url 'user_my_account' %}">My Account</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Webpage with Map and Search Bar -->
+
+<!-- References:
+Titles: Google Maps API Documentation (Place Autocomplete and Place Search Bar)
+URLS: https://developers.google.com/maps/documentation/javascript/examples/places-searchbox#maps_places_searchbox-css and https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete#maps_places_autocomplete-javascript
+License: Apache 2.0 License
+
+Title: Overlapping Marker Spiderfier for Google Maps API v3
+URL: https://github.com/jawj/OverlappingMarkerSpiderfier
+License: MIT License
+-->
+<html>
+  <head>
+    {% load static %}
+    <title>Normal Welcome</title>
+    <link rel="stylesheet" href="{% static 'login/style.css' %}" />
+    <link href="https://fonts.googleapis.com/css2?family=Franklin+Gothic&family=Bodoni&display=swap" rel="stylesheet">
+  </head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OverlappingMarkerSpiderfier/1.0.3/oms.min.js"></script>
+
+  <body style="background: #232D4B; width: 100%; height: 100%">
+    <div class="text-center">
+      <h1 style="padding: 20px;">Welcome, {{ username }}!</h1>
+      <p>Utilize the map below to locate lost items across grounds. Click on the markers to reveal details about each item, including a description, image, uploader's information, and date posted. If you recognize an item as yours, you have the option to claim it. Click the button in the upper-right corner of the map to enter fullscreen mode.</p>
+
+      <form id="claim-form" method="post" style="display: none;">
+        {% csrf_token %}
+      </form>
+
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+      <body style="background: white; width: 100%; height: 100%">
+
+        <input
+          id="pac-input"
+          class="controls"
+          type="text"
+          placeholder="Search Box"
+        />
+        <div class="mapholder">
+          <div id="map"></div>
+          <div id="legend"><h3>Legend:</h3></div>
+        </div>
+        <!-- <div id="infowindow-content">
+        <span id="place-name" class="title"></span><br />
+        <span id="place-address"></span>
+        </div> -->
+
+        <script>
+            const csrf_token = "{{ csrf_token }}";
+        </script>
+    
+        <script>
+          let map;
+
+           /*References
+          Title: infowindow is not updating with marker google maps
+          URL: https://stackoverflow.com/questions/40067130/infowindow-is-not-updating-with-marker-google-maps
+          */
+          
+          function createMarker(lat, long, name, user, date, description, image, pinWindow, username, email, id, oms){
+            var new_marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(lat, long),
+                    title: name
+                });
+            oms.addMarker(new_marker);
+            //alert(image);
+            new_marker.addListener('spider_click', ({ domEvent, latLng }) => {
+              const { target } = domEvent;
+
+              var imageTag = image ? "<img src='"+image+"' alt='"+description+"' style='max-width: 100px; height: auto;'>" : "<!-- No Image Available -->";
+              const html = "<div style=\"text-align: left;\">"+
+                            "<form action='/welcome/claim_item/" + id + "/' method='post'>" +
+                            "<input type='hidden' name='csrfmiddlewaretoken' value='" + csrf_token + "'>" +
+                            "<button type='button' onclick='claimItem(\"" + name + "\", \"" + username + "\", \"" + email + "\", " + id + ")' style='background-color: #F84C1E; color: white; display: block; margin: 0 auto;'>CLAIM ITEM</button>"+
+                            "</form>"+
+                          "<h3 style='color: #232D4B;'>"+name+"</h3>"+
+                          "<label style='color: black;'>Posted by: <strong style='color: #F84C1E;'>"+user+"</strong> on <strong style='color: #F84C1E;'>"+date+"</strong></label><br><br>"+
+                          "<p style='color: black;'>"+description+"</p>"+
+                          imageTag +
+                          "</div>";
+
+              pinWindow.close();
+              pinWindow.setContent(html);
+              //alert(new_marker.position);
+              pinWindow.open(new_marker.map, new_marker);
+            });
+          }
+          function claimItem(name, username, email, id) {
+            // Prevent the default form submission
+            event.preventDefault();
+
+            let message = "Thank you for claiming the item, " + "<span style='color: #F84C1E;'>" + name + "</span>! Please contact " +
+                  "<span style='color: #F84C1E;'>" + 
+                  username + 
+                  "</span> at <span style='color: #F84C1E;'>" + 
+                  email + 
+                  "</span> to coordinate. You will also receive a copy of this claim receipt in your notification inbox for future reference.";
+            document.querySelector('#claimItemModal .modal-body').innerHTML = message;
+
+              // Trigger the modal to open
+              new bootstrap.Modal(document.getElementById('claimItemModal')).show();
+                            
+              // Prepare form data
+              let formData = new FormData();
+              formData.append('csrfmiddlewaretoken', csrf_token);
+
+              // AJAX call
+              fetch('/welcome/claim_item/' + id + '/', {
+                  method: 'POST',
+                  body: formData
+              })
+              .then(response => response.json())
+              .then(data => {
+                  console.log('Success:', data);
+                  // You can choose to close the modal here or leave it for manual closure
+              })
+              .catch((error) => {
+                  console.error('Error:', error);
+              });
+          }
+
+          function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+              center: { lat: 38.033554, lng: -78.50798 },
+              zoom: 18,
+            });
+            var oms = new OverlappingMarkerSpiderfier(map, {
+                markersWontMove: true,
+                markersWontHide: true,
+                basicFormatEvents: true
+            });
+            //const markers = [];
+            const pinWindow = new google.maps.InfoWindow();
+            let new_marker;
+              {% for item in lost_items %}
+                createMarker(
+                  {{ item.latitude }}, 
+                  {{ item.longitude }}, 
+                  "{{ item.name }}", 
+                  "{{ item.user }}", 
+                  "{{ item.date_uploaded }}", 
+                  "{{ item.description }}", 
+                  {% if item.item_image %}"{{ item.item_image.url }}"{% else %}""{% endif %}, 
+                  pinWindow, 
+                  "{{ item.user.username }}", 
+                  "{{ item.user.email }}", 
+                  {{ item.id }}, 
+                  oms
+                );
+              {% endfor %}
+            
+            const input = document.getElementById("pac-input");
+            const options = {
+              fields: ["formatted_address", "geometry", "name"],
+            };
+  
+            map.controls[google.maps.ControlPosition.TOP].push(input);
+  
+            const autocomplete = new google.maps.places.Autocomplete(input, options);
+  
+            const infowindow = new google.maps.InfoWindow();
+            const infowindowContent = document.getElementById("infowindow-content");
+  
+            infowindow.setContent(infowindowContent);
+  
+            const marker = new google.maps.Marker({
+              map,
+              anchorPoint: new google.maps.Point(0, -29),
+            });
+  
+            autocomplete.addListener("place_changed", () => {
+              infowindow.close();
+              marker.setVisible(false);
+  
+              const place = autocomplete.getPlace();
+  
+              if (!place.geometry || !place.geometry.location) {
+                window.alert("No details available for this location: '" + place.name + "'");
+                return;
+              }
+
+              if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+              } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);
+              }
+  
+              marker.setPosition(place.geometry.location);
+              marker.setVisible(false);
+              infowindowContent.children["place-name"].textContent = place.name;
+              infowindowContent.children["place-address"].textContent =
+                place.formatted_address;
+              infowindow.open(map, marker);
+            });
+  
+            function setupClickListener(id, types) {
+              const radioButton = document.getElementById(id);
+  
+              radioButton.addEventListener("click", () => {
+                autocomplete.setTypes(types);
+                input.value = "";
+              });
+            }
+            
+            const legend = document.getElementById("legend");
+            const div = document.createElement("div");
+            div.innerHTML = '<img src="http://maps.google.com/mapfiles/ms/icons/red-dot.png"> Lost Item';
+            legend.appendChild(div);
+            // Then push the legend to the map
+            map.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
+
+            setupClickListener("changetype-all", []);
+          }
+          window.initMap = initMap;
+
+        </script>
+  
+        <script
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAVNiQY02xsXtQ4S-IzIcnDiPSEZNzQ8wg&callback=initMap&libraries=places&v=weekly"
+        ></script>
+      </div>
+
+      <!-- Container for buttons -->
+      <div class="buttons-container">
+        <!-- Open Bottom Banner Again -->
+        <button class="upload-button" type="button" data-bs-toggle="collapse" data-bs-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse">
+          Reopen Information Bar
+        </button>
+        <!-- Log out -->
+        <a class="upload-button" href="logout">Logout</a>
+      </div>
+
+      <!-- Bottom FootNote/Banner -->
+      <div class="bottom-banner collapse show" id="bannerCollapse">
+          <div class="banner-item">
+            <img src="{% static 'login/images/Marker 1.png' %}" alt="Icon" class="button-icon">
+            <h5 style = 'color: #232D4B;'>Upload an Item</h5>
+            <p style = 'color: black'>Found an item on grounds? Help reunite it with its owner! Simply snap a photo, and use our easy upload form to add an image and a brief description of the item. Your assistance enhances UVA's lost and found process.</p>
+            <a class="banner-button2" href="{% url 'upload_item' %}">Upload an Item</a>
+          </div>
+          <div class="banner-item">
+            <img src="{% static 'login/images/Marker 2.png' %}" alt="Icon" class="button-icon">
+            <h5 style = 'color: #232D4B;'>My Uploads</h5>
+            <p style = 'color: black'>View all items you've uploaded and manage your posts. This page allows you to easily remove an upload once the item has been successfully claimed.</p>
+            <a class="banner-button1" href="{% url 'my_uploads' %}">My Uploads</a>
+          </div>
+          <div class="banner-item">
+            <img src="{% static 'login/images/Marker 1.png' %}" alt="Icon" class="button-icon">
+            <h5 style = 'color: #232D4B;'>Notifications</h5>
+            <p style = 'color: black'>Stay informed about your lost and found activity. Receive updates on claimed items, check the status of your pending uploads, and monitor any other important account notifications.</p>
+            <a class="banner-button2" href ="{% url 'user_notifications' %}">Notifications</a>
+          </div>
+          <div class="banner-item">
+            <img src="{% static 'login/images/Marker 2.png' %}" alt="Icon" class="button-icon">
+            <h5 style = 'color: #232D4B;'>My Account</h5>
+            <p style = 'color: black'>Review and update your account details. This section enables you to view your current username and email, and provides the option to modify your username or add a phone number as needed.</p>
+            <a class="banner-button1" href="{% url 'user_my_account' %}">My Account</a>
+          </div>
+          <!-- Container for the close button -->
+          <div class="close-container">
+            <!--<button class="btn-close" type="button" data-bs-toggle="collapse" data-bs-target="#bannerCollapse" aria-expanded="true" aria-controls="bannerCollapse" aria-label="Close">-->
+            <button class="btn-close custom-close-btn" type="button" data-bs-toggle="collapse" data-bs-target="#bannerCollapse" aria-expanded="true" aria-controls="bannerCollapse">
+              <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrows-collapse" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 8m7-8a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 4.293V.5A.5.5 0 0 1 8 0m-.5 11.707-1.146 1.147a.5.5 0 0 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 11.707V15.5a.5.5 0 0 1-1 0z"/>
+              </svg>
+            </button>
+          </div>
+      </div>
+      
+    </div>
+
+    <!-- Item Claimed Modal -->
+    <div class="modal fade" id="claimItemModal" tabindex="-1" role="dialog" aria-labelledby="claimItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+       <div class="modal-content">
+         <div class="modal-header">
+           <h5 style="color: black" class="modal-title" id="claimItemModalLabel">Item Successfully Claimed!</h5>
+           <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+          </div>
+        <div class="modal-body">
+        </div>
+          <div class="modal-footer">
+            <button type="button" class="upload-button" id="closeModalButton">Close</button>
+          </div>
+       </div>
+     </div>
+    </div>
+
+    </body>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('closeModalButton').addEventListener('click', function() {
+            var myModal = bootstrap.Modal.getInstance(document.getElementById('claimItemModal'));
+            myModal.hide();
+        });
+
+        document.getElementById('closeTopRightButton').addEventListener('click', function() {
+          var myModal = bootstrap.Modal.getInstance(document.getElementById('claimItemModal'));
+          myModal.hide();
+        });
+    });
+    </script>
+  </html>
+    

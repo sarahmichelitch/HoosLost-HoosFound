@@ -1,0 +1,96 @@
+/* 
+REFERENCES:
+
+Title: Figma Development
+URL: https://www.figma.com/file/8m3LIG4d57oUCBInJ6rCEK/HoosLost%26HoosFound?type=design&node-id=0%3A1&mode=dev
+
+*/
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-image: linear-gradient(to bottom, #232d4b 0%, #232d4b 50%, #f84c1e 50%, #f84c1e 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    line-height: normal;
+}
+
+.HooslostHoosfoundSymbol {
+    width: 30vh;
+    height: auto;  
+    object-fit: cover;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 40px;
+}
+
+.heading {
+    font-size: 50px;
+    color: white;
+}
+
+.Polygon1, .Polygon2 {
+    position: absolute;
+    width: 29%; 
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 1;
+    mix-blend-mode: overlay;
+}
+
+.Polygon1 {
+    left: 0;
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+.Polygon2 {
+    right: 0;
+    clip-path: polygon(100% 0, 0 100%, 100% 100%);
+}
+
+.Rectangle3 {
+    position: absolute;
+    width: 43vw; 
+    min-height: 12vh;  
+    background: #3C4D80; 
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border: 1px black solid;
+    z-index: 1;
+    top: 14%;
+    left: 30%;  
+}
+
+.WelcomeText {
+    text-align: center;
+    color: white; 
+    font-size: calc(1em + 1vw);  
+    font-family: 'Franklin Gothic', sans-serif;
+    font-weight: 700;
+    word-wrap: break-word;
+    padding: 1vh;  
+    z-index: 1;
+    text-shadow: -1.75px 0 black, 0 1.75px black, 1.75px 0 black, 0 -1.75px black;
+}
+
+.logoAndButton {
+    position: absolute;
+    z-index: 1; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 3vh;
+  }
+
+  .btn {
+    width: 20vw;  
+    font-family: 'Franklin Gothic', sans-serif;
+    color: #232d4b;
+}
+  

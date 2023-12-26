@@ -1,0 +1,140 @@
+<!-- REFERENCES:
+
+Title: Bootstrap Navbar
+URL: https://getbootstrap.com/docs/5.3/components/navbar/
+
+Title: Bootstrap Buttons
+URL: https://getbootstrap.com/docs/5.3/components/buttons/
+
+-->
+
+{% load static %}
+
+<!--CDNs for Bootstrap-->
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+  crossorigin="anonymous"
+/>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+  crossorigin="anonymous"
+></script>
+
+<!DOCTYPE html>
+
+<!-- Navbar -->
+<nav
+  class="navbar navbar-expand-lg bg-body-tertiary"
+  style="background-color: #c9deed"
+>
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img
+        src="{% static 'login/images/New L&F Symbol.png' %}"
+        alt="HoosLost&HoosFound Logo"
+        width="80"
+        height="80"
+        class="d-inline-block align-text-top"
+    /></a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link custom-nav-link" href="{% url 'welcome' %}"
+            >Home</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link custom-nav-link" href="{% url 'upload_item' %}"
+            >Upload an Item</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link custom-nav-link" href="{% url 'my_uploads' %}"
+            >My Uploads</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link active custom-nav-link"
+            aria-current="page"
+            href="#"
+            >Notifications</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link custom-nav-link" href="{% url 'user_my_account' %}"
+            >My Account</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% load static %}
+    <title>User Notifications</title>
+    <link rel="stylesheet" href="{% static 'login/style.css' %}" />
+  </head>
+  <body style="background: #232d4b; width: 100%; height: 100%">
+    <div class="text-center">
+      <h1 style="padding: 20px">Your Notifications</h1>
+      {% if notifications %}
+      <div class="table-container">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>Message</th>
+              <th>Time</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for notification in notifications %}
+            <tr>
+              <td>{{ notification.message }}</td>
+              <td>{{ notification.date }}</td>
+              <td>
+                <form
+                  action="{% url 'delete_notification' notification.id %}"
+                  method="post"
+                >
+                  {% csrf_token %}
+                  <button
+                    type="submit"
+                    class="btn-close"
+                    aria-label="Close"
+                  ></button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p>No notifications!</p>
+      {% endif %}
+
+      <a class="upload-button" href="logout">Logout</a>
+    </div>
+  </body>
+</html>

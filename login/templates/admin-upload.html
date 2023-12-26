@@ -1,0 +1,290 @@
+<!-- REFERENCES:
+
+Title: Upload Images To Django - Django Wednesdays #38
+URL: https://www.youtube.com/watch?v=O5YkEFLXcRg&ab_channel=Codemy.com
+
+Title: Bootstrap Navbar
+URL: https://getbootstrap.com/docs/5.3/components/navbar/
+
+Title: Bootstrap Modal
+URL: https://getbootstrap.com/docs/5.3/components/modal/
+
+Title: Bootstrap Buttons
+URL: https://getbootstrap.com/docs/5.3/components/buttons/
+
+Title: Bootstrap Popovers
+URL: https://getbootstrap.com/docs/5.3/components/popovers/
+
+Title: Bootstrap Icon Link
+URL: https://getbootstrap.com/docs/5.3/helpers/icon-link/
+
+Title: Place Autocompelete 
+URL: https://developers.google.com/maps/documentation/javascript/place-autocomplete
+
+Title: How to add a Place Autocomplete search widget to your website
+URL: https://www.youtube.com/watch?v=c3MjU9E9buQ&t=1s 
+
+-->
+
+{% load static %}
+
+<!--CDNs for Bootstrap-->
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+  crossorigin="anonymous"
+/>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+  crossorigin="anonymous"
+></script>
+
+<!DOCTYPE html>
+
+<!-- Navbar -->
+<nav
+  class="navbar navbar-expand-lg bg-body-tertiary"
+  style="background-color: #c9deed"
+>
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img
+        src="{% static 'login/images/New L&F Symbol.png' %}"
+        alt="HoosLost&HoosFound Logo"
+        width="80"
+        height="80"
+        class="d-inline-block align-text-top"
+    /></a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link custom-nav-link" href="{% url 'welcome' %}">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active custom-nav-link" aria-current="page" href="#"
+            >Upload an Item</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link custom-nav-link" href="{% url 'my_uploads_admin' %}">My Uploads</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link custom-nav-link" href="{% url 'manage_uploads' %}">Manage Uploads</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link custom-nav-link" href="{% url 'admin_notifications' %}">Notifications</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link custom-nav-link" href="{% url 'admin_my_account' %}">My Account</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+        {% load static %}
+        <title>Upload an Item</title>
+        <link rel="stylesheet" href="{% static 'login/style.css' %}" />
+        <!-- google api -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAVNiQY02xsXtQ4S-IzIcnDiPSEZNzQ8wg&libraries=places&callback=initAutocomplete"></script>
+        <script>
+          //manual search and autocomplete
+          let autocomplete;
+          function initAutocomplete(){
+            autocomplete = new google.maps.places.Autocomplete(
+             document.getElementById('autocomplete'),
+             {
+                types: ['establishment'],
+                fields: ['place_id', 'geometry', 'name']
+              });
+            autocomplete.addListener('place_changed', onPlace);
+          }
+          function onPlace(){
+            var place = autocomplete.getPlace();
+            if(place.geometry){
+              var latitude = place.geometry.location.lat().toFixed(6);
+              var longitude = place.geometry.location.lng().toFixed(6);
+              document.getElementById('latitude').value = latitude;
+              document.getElementById('longitude').value = longitude;
+              document.getElementById('autocomplete').placeholder = 'Enter a place..';
+            }else{
+              document.getElementById('autocomplete').innerHTML = place.name;
+            }
+          }
+          document.addEventListener("DOMContentLoaded", function() {
+            initAutocomplete();
+          });
+
+          // JavaScript for getting current location
+          document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('get-location').addEventListener('click', function() {
+              if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                  var geocoder = new google.maps.Geocoder();
+    
+                  geocoder.geocode({'location': {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                  }}, function(results, status) {
+                    if (status === 'OK' && results[0]) {
+                        var location = results[0].geometry.location;
+                        var latitude = location.lat().toFixed(6);
+                        var longitude = location.lng().toFixed(6);
+
+                        document.getElementById('autocomplete').value = results[0].formatted_address;
+                        document.getElementById('latitude').value = latitude;
+                        document.getElementById('longitude').value = longitude;
+                    }else {
+                      alert('Geocoder failed due to: ' + status);
+                    }            
+                  });
+                });
+              } else {
+                alert("Geolocation is not supported by this browser.");
+              }
+            });
+          });
+        </script>
+        <!-- javascript to preview the image-->
+        <script>
+          function previewImage() {
+              var preview = document.getElementById('image-preview');
+              var file    = document.getElementById('item_image').files[0];
+              var reader  = new FileReader();
+          
+              reader.onloadend = function () {
+                  preview.src = reader.result;
+                  preview.style.display = 'block'; // Make the image visible
+              }
+          
+              if (file) {
+                  reader.readAsDataURL(file); // Read the image file as a data URL.
+              } else {
+                  preview.src = "";
+                  preview.style.display = 'none'; // Hide the image element if no image is chosen
+              }
+          }
+          </script>
+
+    <head>
+        <body style="background: #232d4b; width: 100%; height: 100%">
+            <div class="text-center">
+              <h1 style="padding: 20px">Upload an Item</h1>
+              <div class="background-box text-center" style="padding: 20px">
+                <p class="instruction">
+                  Need guidance on filling out the form? Simply hover your mouse over the labels 'Item Name', 'Location', 'Image', or 'Description' for detailed instructions and information.
+                </p>
+              </div>
+             <!-- Start of the form -->
+             <form method="post" action="{% url 'upload_item_admin' %}" enctype="multipart/form-data" class="mx-auto" style="max-width: 500px;">
+                {% csrf_token %}
+        
+                <div class="mb-3">
+                  <label for="item-input" class="form-label">
+                    <a href="#" class="icon-link" style="--bs-link-hover-color: white" data-bs-toggle="popover"data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-placement="right" data-bs-title="Item Name Details" data-bs-content="Use this field to assign a title to your item, which will appear on the map. Name the item descriptively, like 'Black 5-Star Notebook' or 'Pink Hydroflask', for easy identification." data-bs-trigger="hover">
+                      Item Name:
+                    </a>
+                  </label>
+                    <input type="text" id="item-input" name="name" class="form-control" placeholder="Enter item name..." required>
+                </div>
+        
+                <div class="mb-3">
+                  <label for="location-input" class="form-label">
+                    <a href="#" class="icon-link" style="--bs-link-hover-color: white" data-bs-toggle="popover"data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-placement="right" data-bs-title="Location Details" data-bs-content="In this field, enter the location where you found the item. If you're not at the original location, type the location name in the 'Enter location' field and choose the appropriate suggestion from the dropdown. Alternatively, for precise positioning, click the 'Get Current Location' button to use your current coordinates." data-bs-trigger="hover">
+                      Location:
+                    </a>
+                  </label>
+                    <div class="input-group">
+                        <input id="autocomplete" type="text" name="location" class="form-control" placeholder="Enter location..." required>
+                        <button id="get-location" type="button" class="btn btn-secondary">Get Current Location</button>
+                    </div>
+                </div>
+
+                <input type="hidden" id="latitude" name="latitude">
+                <input type="hidden" id="longitude" name="longitude">
+
+                <div class="mb-3">
+                  <label for="item_image" class="form-label" >
+                    <a href="#" class="icon-link" style="--bs-link-hover-color: white" data-bs-toggle="popover"data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-placement="right" data-bs-title="Image Upload Details" data-bs-content="While not mandatory, attaching a photo is recommended to help users easily identify their lost items. If you opt to upload an image, capture the item as it is. Click 'Choose File' to upload your photo. For optimal clarity, JPEG or PNG formats are preferred." data-bs-trigger="hover">
+                      Image:
+                    </a>
+                  </label>
+                    <input type="file" id="item_image" name="item_image" class="form-control"  onchange="previewImage();">
+                    <img id="image-preview" src="#" alt="Image preview" style="display: none; max-width: 100%; height: auto; margin-top: 10px;">
+                </div>
+
+                 
+                <div class="mb-3">
+                  <label for="description-input" class="form-label">
+                    <a href="#" class="icon-link" style="--bs-link-hover-color: white" data-bs-toggle="popover"data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-placement="right" data-bs-title="Description Detail Tips" data-bs-content="This optional field is ideal for additional specifics or notes about the item. You might include the precise location, like  &quot;Found in Olsson 120 &quot; or  &quot;Second floor treadmill at AFC &quot;, or distinct item features, such as  &quot;Sticker on AirPods case that says 'UVA Engineering' &quot;. Such details enhance item identification." data-bs-trigger="hover">
+                      Description:
+                    </a>
+                  </label>
+                  <textarea id="description-input" name="description" class="form-control" rows="3" placeholder="Enter item description...(max 1000 characters)"></textarea>
+                </div>
+
+                <div class="d-grid gap-2">
+                  <button type="button" class="upload-button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Upload</button>
+                </div>
+            </form>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: black;">Final Submission Confirmation</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body" style="color: black;">
+                  Please review your entry carefully. Once submitted, this information cannot be edited. Are you sure you want to proceed with the submission?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Continue Editing</button>
+                    <button type="button" class="upload-button" id="confirm-submit">Submit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <script>
+              document.addEventListener('DOMContentLoaded', function() {
+                  document.getElementById('confirm-submit').addEventListener('click', function() {
+                      document.querySelector('form').submit();
+                  });
+              });
+              // Initialize popovers
+              const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
+              const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
+
+              // Hide popover when clicking anywhere else on the page
+              document.addEventListener('click', function (e) {
+                popoverList.forEach(function (popover) {
+                  if (!popover._element.contains(e.target)) {
+                    popover.hide();
+                  }
+                });
+              });
+          </script>
+
+          
+        </body>
+</html>

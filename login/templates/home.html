@@ -1,0 +1,53 @@
+<!-- REFERENCES:
+
+Title: Figma Development
+URL: https://www.figma.com/file/8m3LIG4d57oUCBInJ6rCEK/HoosLost%26HoosFound?type=design&node-id=0%3A1&mode=dev
+
+Title: Set up Google Sign-In for Faster Django Login Experience feat. Tech with Tim
+URL: https://youtu.be/yO6PP0vEOMc?si=_mE_U2EkylqbVoMZ
+
+-->
+
+{% load static %} {% load socialaccount %}
+
+<!--CDNs for Bootstrap-->
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+  crossorigin="anonymous"
+/>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+  crossorigin="anonymous"
+></script>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lost and Found Google Sign In</title>
+    <link rel="stylesheet" href="{% static 'login/login.css' %}" />
+  </head>
+  <body>
+    <div class="Polygon1"></div>
+    <div class="Rectangle3">
+      <div class="WelcomeText">
+        Welcome to HoosLost&HoosFound, an app to upload and find lost items
+        around grounds.
+      </div>
+    </div>
+    <div class="logoAndButton">
+      <img
+        class="HooslostHoosfoundSymbol"
+        src="{% static 'login/images/New L&F Symbol.png' %}"
+      />
+      <a href="{% provider_login_url 'google' %}">
+        <button type="button" class="btn btn-light">Sign in with Google</button>
+      </a>
+    </div>
+    <div class="Polygon2"></div>
+  </body>
+</html>
